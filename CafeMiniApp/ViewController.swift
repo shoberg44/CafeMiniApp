@@ -29,9 +29,19 @@ class ViewController: UIViewController {
         } //... inclusive of 1 ..< exlusisive of one
         
     */
-       
+        for i in 0 ..< items.count{
+        menuLabel.text = "\(items[i])\t\(prices[i])"
+        }
         items.append("apple")
         prices.append(2.08)
+        items.append("steak")
+        prices.append(8.00)
+        items.append("water")
+        prices.append(1.50)
+        items.append("shake")
+        prices.append(5.75)
+        
+        
         
         
         
@@ -109,6 +119,11 @@ class ViewController: UIViewController {
                     if textInput.text == items[i]{//if match
                         itemCart.append(textInput.text!)//add to your car array
                         price += prices[i]//calculate price
+                        price = round(price * 100) / 100.0 // round to .00
+                        priceOutput.text = "$\(price)"//update price
+                        print("found")
+                        cartOutput.text = "\(cartOutput.text!)\n" + "\(items[i])\t\(prices[i])"
+                       
                         priceOutput.text = "$\(price)"//update price
                         break//break loop since item found
                         
