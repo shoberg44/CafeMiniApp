@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     var prices = [Double]()
     var itemCart = [String]()
     var price : (Double) = 0.00
-    
+    var bag : (String) = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         /* Do any additional setup after loading the view.
@@ -29,9 +29,7 @@ class ViewController: UIViewController {
         } //... inclusive of 1 ..< exlusisive of one
         
     */
-        for i in 0 ..< items.count{
-        menuLabel.text = "\(items[i])\t\(prices[i])"
-        }
+        
         items.append("apple")
         prices.append(2.08)
         items.append("steak")
@@ -40,7 +38,9 @@ class ViewController: UIViewController {
         prices.append(1.50)
         items.append("shake")
         prices.append(5.75)
-        
+        items.append("potato")
+        prices.append(3.75)
+        updateMenu()
         
         
         
@@ -55,24 +55,21 @@ class ViewController: UIViewController {
 
             view.addGestureRecognizer(tap)
     }
+    func updateMenu(){
+        menuLabel.text = ""
+        for i in 0 ..< items.count{
+                menuLabel.text = (menuLabel.text ?? " ") + "\(items[i])\t\(prices[i])\n"
+        }
+    }
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     var devmode = 0
     @IBAction func cartAdd(_ sender: UIButton) {
-        /*
-         else if textInput.text == "exit" && devmode == 1{
-             view.backgroundColor = UIColor.systemBackground
-             cartOutput.text = ""
-             textInput.text = ""
-             devmode = 0
-             break
-         }
-        */
         //var storage : (String)
-        alert.isHidden = true
         alert.text = "Not on the menu!"
+        alert.isHidden = true
         if textInput.text != "" {//ensure text in feild
             print("devmode --> \(devmode)")
             
@@ -101,6 +98,7 @@ class ViewController: UIViewController {
                     textInput.placeholder = "Add Item's Here"
                     print(prices)
                     devmode = 1
+                    updateMenu()
                 }
                 else {
                     alert.text = "Invalid Input"
@@ -112,6 +110,7 @@ class ViewController: UIViewController {
                 cartOutput.text = ""
                 textInput.text = ""
                 devmode = 0
+                cartOutput.text = bag
             }
             else{
                 //\//////////end of dev mode code/////
@@ -132,13 +131,17 @@ class ViewController: UIViewController {
                    //devmode path
                     else if textInput.text == "pass" {
                         view.backgroundColor = UIColor.systemRed
+                        bag = cartOutput.text ?? " "
                         cartOutput.text = "Manager Mode\nType 'exit' to exit mode"
                         devmode = 1
                         textInput.text = ""
+                        
                         break
                     }
                     else{
-                        alert.isHidden = false
+                        if i == (items.count-1){ //see if at end
+                            alert.isHidden = false
+                        }
                     }
                 }
             }
