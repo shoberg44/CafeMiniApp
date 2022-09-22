@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     var prices = [Double]()
     var itemCart = [String]()
     var price : (Double) = 0.00
-    var bag : (String) = ""
+    var bag : (String) = "" //cart mem during dev mode
     override func viewDidLoad() {
         super.viewDidLoad()
         /* Do any additional setup after loading the view.
@@ -65,13 +65,79 @@ class ViewController: UIViewController {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
+    @IBAction func sortButton2(_ sender: UIButton) {
+        var done = strBubStep(strDArray: itemCart).1
+        var step = strBubStep(strDArray: itemCart).0
+        while done == true{
+            done = strBubStep(strDArray: step).1
+            step = strBubStep(strDArray: step).0
+        }
+        print(step)
+        itemCart = step
+        updateCart()
+    }
+        
+    @IBAction func sortButton(_ sender: UIButton) {
+        itemCart.sort(by: sortDem(string1:string2:))
+        updateCart()
+    }
+    func findPrice(inputString str: String)->Double{
+            for i in 0 ..< items.count{
+                if items[i] == str{
+                    return prices[i]
+                }
+            }
+        return 0.0
+    }
+    func strBubStep(strDArray stuff: [String])->([String],Bool){
+        print("-----nw bubble---")
+        if stuff.count == 1{
+            return (stuff,false)
+        }
+        var acted = false
+        var str = ""
+        for i in 0 ..< stuff.count-1{
+            print("comparring")
+            print("> \(itemCart[i])>\(itemCart[i+1])")
+            if findPrice(inputString: itemCart[i]) < findPrice(inputString: itemCart[i+1]){
+                str = itemCart[i+1]
+                itemCart[i+1] = itemCart[i]
+                itemCart[i] = str
+                acted = true
+            }
+            else{
+                print("\(itemCart[i]) was not smaller than \(itemCart[i+1])")
+            }
+        }
+        return (stuff,acted)
+    }
+    func updateCart(){
+        price = 0
+        cartOutput.text = ""
+        for i in 0 ..< itemCart.count{//for each item in car. search master list for matching name location and therefoe matching price.
+            for f in 0 ..< items.count{
+                if itemCart[i] == items[f]{//finds which index in master list belongs to which item in cart. note not a garrentie i will = to f. Thats stupid stop thinking that.
+                    price += prices[f]//calculate price
+                    price = round(price * 100) / 100.0 // round to .00
+                    priceOutput.text = "$\(price)"//update price
+                    cartOutput.text = "\(cartOutput.text!)\n" + "\(items[f])\t\(prices[f])"
+                    break
+                }
+            }
+        }
+    }
+    func sortDem(string1: String, string2: String)->Bool{
+        string1 < string2
+    }
+    func sortDem2(num1: Double, num2: Double)->Bool{
+        num1 < num2
+    }
     var devmode = 0
     @IBAction func cartAdd(_ sender: UIButton) {
         //var storage : (String)
         alert.text = "Not on the menu!"
         alert.isHidden = true
         if textInput.text != "" {//ensure text in feild
-            print("devmode --> \(devmode)")
             
             
             /*dev mode explantion
@@ -120,10 +186,8 @@ class ViewController: UIViewController {
                         price += prices[i]//calculate price
                         price = round(price * 100) / 100.0 // round to .00
                         priceOutput.text = "$\(price)"//update price
-                        print("found")
                         cartOutput.text = "\(cartOutput.text!)\n" + "\(items[i])\t\(prices[i])"
-                       
-                        priceOutput.text = "$\(price)"//update price
+                        textInput.text = ""
                         break//break loop since item found
                         
                     }
