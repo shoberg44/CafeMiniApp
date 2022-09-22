@@ -66,9 +66,11 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
     @IBAction func sortButton2(_ sender: UIButton) {
-        var done = strBubStep(strDArray: itemCart).1
+        var done = true
         var step = strBubStep(strDArray: itemCart).0
+        print("**********\(step)**************")
         while done == true{
+            
             done = strBubStep(strDArray: step).1
             step = strBubStep(strDArray: step).0
         }
@@ -89,26 +91,27 @@ class ViewController: UIViewController {
             }
         return 0.0
     }
-    func strBubStep(strDArray stuff: [String])->([String],Bool){
-        print("-----nw bubble---")
+    func strBubStep(strDArray stuff: [String])->([String],Bool){ //set stuff as new var sort that not old cartList
         if stuff.count == 1{
             return (stuff,false)
         }
         var acted = false
         var str = ""
         for i in 0 ..< stuff.count-1{
-            print("comparring")
-            print("> \(itemCart[i])>\(itemCart[i+1])")
+            print("\([i]) | \(findPrice(inputString: itemCart[i])) < \(itemCart[i+1]) | \(findPrice(inputString: itemCart[i+1])) ")
+            print(findPrice(inputString: itemCart[i]) < findPrice(inputString: itemCart[i+1]))
             if findPrice(inputString: itemCart[i]) < findPrice(inputString: itemCart[i+1]){
+                print("before swap \(itemCart)")
                 str = itemCart[i+1]
-                itemCart[i+1] = itemCart[i]
+                stuff[i+1] = stuff[i]
                 itemCart[i] = str
+                print("after swap \(itemCart)")
                 acted = true
             }
             else{
-                print("\(itemCart[i]) was not smaller than \(itemCart[i+1])")
             }
         }
+        print((stuff,acted))
         return (stuff,acted)
     }
     func updateCart(){
