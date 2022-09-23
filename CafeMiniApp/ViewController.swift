@@ -66,16 +66,12 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
     @IBAction func sortButton2(_ sender: UIButton) {
-        var done = true
-        var step = strBubStep(strDArray: itemCart).0
-        print("**********\(step)**************")
-        while done == true{
+        var tuple = (itemCart,true)
+        while tuple.1 == true{
             
-            done = strBubStep(strDArray: step).1
-            step = strBubStep(strDArray: step).0
+            tuple = strBubStep(strDArray: tuple.0)
         }
-        print(step)
-        itemCart = step
+        itemCart = tuple.0
         updateCart()
     }
         
@@ -92,27 +88,22 @@ class ViewController: UIViewController {
         return 0.0
     }
     func strBubStep(strDArray stuff: [String])->([String],Bool){ //set stuff as new var sort that not old cartList
-        if stuff.count == 1{
-            return (stuff,false)
+        var tempList = stuff
+        if tempList.count == 1{
+            return (tempList,false)
         }
         var acted = false
         var str = ""
-        for i in 0 ..< stuff.count-1{
-            print("\([i]) | \(findPrice(inputString: itemCart[i])) < \(itemCart[i+1]) | \(findPrice(inputString: itemCart[i+1])) ")
-            print(findPrice(inputString: itemCart[i]) < findPrice(inputString: itemCart[i+1]))
-            if findPrice(inputString: itemCart[i]) < findPrice(inputString: itemCart[i+1]){
-                print("before swap \(itemCart)")
-                str = itemCart[i+1]
-                stuff[i+1] = stuff[i]
-                itemCart[i] = str
-                print("after swap \(itemCart)")
+        for i in 0 ..< tempList.count-1{
+            if findPrice(inputString: tempList[i]) < findPrice(inputString: tempList[i+1]){
+                str = tempList[i+1]
+                tempList[i+1] = tempList[i]
+                tempList[i] = str
                 acted = true
             }
-            else{
-            }
         }
-        print((stuff,acted))
-        return (stuff,acted)
+        print((tempList,acted))
+        return (tempList,acted)
     }
     func updateCart(){
         price = 0
@@ -123,8 +114,8 @@ class ViewController: UIViewController {
                     price += prices[f]//calculate price
                     price = round(price * 100) / 100.0 // round to .00
                     priceOutput.text = "$\(price)"//update price
+                    
                     cartOutput.text = "\(cartOutput.text!)\n" + "\(items[f])\t\(prices[f])"
-                    break
                 }
             }
         }
@@ -153,9 +144,7 @@ class ViewController: UIViewController {
             */
             
             if ((textInput.text! != "exit")&&(textInput.text! != "pass")) && devmode == 1{//checks for first command ignores exit (exit is read when )
-                print(textInput.text!)
                 items.append(textInput.text!)
-                print(items)
                 textInput.text = ""
                 textInput.placeholder = "Now set a price!"
                 devmode = 2
@@ -165,7 +154,6 @@ class ViewController: UIViewController {
                     prices.append(num)
                     textInput.text = ""
                     textInput.placeholder = "Add Item's Here"
-                    print(prices)
                     devmode = 1
                     updateMenu()
                 }
