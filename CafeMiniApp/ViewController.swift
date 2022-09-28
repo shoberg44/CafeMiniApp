@@ -78,6 +78,7 @@ class ViewController: UIViewController {
     @IBAction func sortButton(_ sender: UIButton) {
         itemCart.sort(by: sortDem(string1:string2:))
         updateCart()
+        
     }
     func findPrice(inputString str: String)->Double{
             for i in 0 ..< items.count{
@@ -102,13 +103,12 @@ class ViewController: UIViewController {
                 acted = true
             }
         }
-        print((tempList,acted))
         return (tempList,acted)
     }
     func updateCart(){
         price = 0
         cartOutput.text = ""
-        for i in 0 ..< itemCart.count{//for each item in car. search master list for matching name location and therefoe matching price.
+        for i in 0 ..< itemCart.count{//for each item in cart. search master list for matching name location and therefoe matching price.
             for f in 0 ..< items.count{
                 if itemCart[i] == items[f]{//finds which index in master list belongs to which item in cart. note not a garrentie i will = to f. Thats stupid stop thinking that.
                     price += prices[f]//calculate price
@@ -116,6 +116,7 @@ class ViewController: UIViewController {
                     priceOutput.text = "$\(price)"//update price
                     
                     cartOutput.text = "\(cartOutput.text!)\n" + "\(items[f])\t\(prices[f])"
+                    break
                 }
             }
         }
