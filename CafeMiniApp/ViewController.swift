@@ -128,6 +128,14 @@ class ViewController: UIViewController {
         num1 < num2
     }
     var devmode = 0
+    func find(_ s1: String)->(Bool,Int){
+        for i in 0 ..< items.count{
+            if s1 == items[i]{
+                return (true,i)
+            }
+        }
+        return (false,-1)
+    }
     @IBAction func cartAdd(_ sender: UIButton) {
         //var storage : (String)
         alert.text = "Not on the menu!"
@@ -145,10 +153,17 @@ class ViewController: UIViewController {
             */
             
             if ((textInput.text! != "exit")&&(textInput.text! != "pass")) && devmode == 1{//checks for first command ignores exit (exit is read when )
+                let tuple = find(textInput.text!)
+                if tuple.0 == true{
+                    items.remove(at: tuple.1)
+                    updateMenu()
+                }
+                else{
                 items.append(textInput.text!)
                 textInput.text = ""
                 textInput.placeholder = "Now set a price!"
                 devmode = 2
+                }
             }
             else if devmode == 2{
                 if let num = Double(textInput.text!)  {
